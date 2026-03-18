@@ -15,6 +15,7 @@
     "author": "Vendicated",
     "scripts": {
         "build": "node --require=./scripts/suppressExperimentalWarnings.js scripts/build/build.mjs",
+        "packageDesktop": "node scripts/build/build.mjs --standalone && mkdir -p dist_desktop && cp dist/patcher.js dist/preload.js dist/renderer.js dist/renderer.css dist_desktop/ && echo '{\"name\":\"vencord\",\"main\":\"patcher.js\"}' > dist_desktop/package.json && npx @electron/asar pack dist_desktop dist/desktop.asar && rm -rf dist_desktop",
         "buildStandalone": "pnpm build --standalone",
         "buildWeb": "node --require=./scripts/suppressExperimentalWarnings.js scripts/build/buildWeb.mjs",
         "buildWebStandalone": "pnpm buildWeb --standalone",

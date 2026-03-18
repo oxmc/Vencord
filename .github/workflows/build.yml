@@ -47,13 +47,23 @@ jobs:
               run: |
                   rm -rf dist/*-unpacked dist/vendor Vencord.user.css vencordDesktopRenderer.css vencordDesktopRenderer.css.map
 
+            - name: Package desktop.asar
+              run: |
+                  mkdir -p dist_desktop
+                  cp dist/patcher.js dist/preload.js dist/renderer.js dist/renderer.css dist_desktop/
+                  cp dist/patcher.js.map dist/preload.js.map dist/renderer.js.map dist/renderer.css.map dist_desktop/ 2>/dev/null || true
+                  cp dist/patcher.js.LEGAL.txt dist/renderer.js.LEGAL.txt dist_desktop/ 2>/dev/null || true
+                  echo '{"name":"vencord","main":"patcher.js"}' > dist_desktop/package.json
+                  npx @electron/asar pack dist_desktop dist/desktop.asar
+                  rm -rf dist_desktop
+
             - name: Get some values needed for the release
               id: release_values
               run: |
                   echo "release_tag=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
             - name: Upload DevBuild as release
-              if: github.repository == 'Vendicated/Vencord'
+              if: github.repository == 'oxmc/Vencord'
               run: |
                   gh release upload devbuild --clobber dist/*
                   gh release edit devbuild --title "DevBuild $RELEASE_TAG"
@@ -62,7 +72,7 @@ jobs:
                   RELEASE_TAG: ${{ env.release_tag }}
 
             - name: Upload DevBuild to builds repo
-              if: github.repository == 'Vendicated/Vencord'
+              if: github.repository == 'oxmc/Vencord'
               run: |
                   git config --global user.name "$USERNAME"
                   git config --global user.email actions@github.com
