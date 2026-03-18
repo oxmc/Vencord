@@ -1,0 +1,3 @@
+[submodule "src/plugins/vc-message-logger-enhanced"]
+	path = src/plugins/vc-message-logger-enhanced
+	url = https://github.com/Syncxv/vc-message-logger-enhanced
